@@ -99,6 +99,31 @@ app.put("/editar/:isbn", (requisicao, resposta) => {
       .json({ mensagem: "Erro ao editar o livro!", erro: error });
   }
 });
+app.patch("/editar/:isbn", (requisicao, resposta) => {
+ try {
+    const isbn = requisicao.params.isbn;
+    const editar = livro.find((l) => l.isbn === isbn);
+    if (!editar) {
+      return resposta.status(404).json({ mensagem: "Livro não encontrado!" });
+    }
+    // enviando para o servidor novos dados para editar o livro
+    const { novoTitulo, novoAutor } = requisicao.body;
+    if (!novoTitulo || !novoAutor) {
+      return resposta
+        .status(400)
+        .json({ mensagem: "Todos os campos para edição são obrigatorios!" });
+    }
+
+    editar.titulo = novoTitulo;
+    editar.autor = novoAutor;
+
+    resposta.status(200).json({ mensagem: "Livro atualizado com sucesso!" });
+  } catch (error) {
+    resposta
+      .status(500)
+      .json({ mensagem: "Erro ao editar o livro!", erro: error });
+  }
+});
 
 //Endpoint para deletar todos os livros
 app.delete("/excluir/todos", (requisicao, resposta) => {
