@@ -10,6 +10,14 @@ const porta = process.env.PORTA || 3000;
 
 const livro = [];
 
+app.get("/", (requisicao, resposta) => {
+  try { 
+  resposta.status(200).json({ mensagem: "Bem-vindo à API de Livros!" });
+  } catch (error) {
+    resposta.status(500).json({ mensagem: "Erro ao acessar a API!" });
+  } 
+});
+
 // Endpoint Cadastrar livro
 app.post("/cadastrar", (requisicao, resposta) => {
   try {
